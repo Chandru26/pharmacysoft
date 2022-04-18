@@ -1,0 +1,31 @@
+<style>
+	.popover {
+		max-width: 450px;
+	}
+	.popover-content {
+		width: 600px;
+	}
+</style>
+<div class="row">				
+		<div class="col-xs-3 nopadding" >Batch		
+			<select ng-options="o for o in batchOptions" required name="batch" class="form-control"  ng-model="student.batch" >
+			</select>	
+		</div>	
+		<div class="col-xs-4 nopadding" >Student Name		
+			<input required  name="studentname" class="form-control"  ng-model="student.first_name" >
+		</div>		
+		<div class="col-xs-1 nopadding" ><br>
+			<button type="button" class="btn btn-primary" 
+			ng-disabled="myForm.batch.$error.required 
+			|| myForm.studentname.$error.required"			
+			ng-click="searchStudentData()" >GO</button>
+		</div>
+</div><br><div class="col-xs-9">
+<div ng-show="searchedStudents.length>0" class=" row well">
+<table class="table table-hover">
+<tr ng-click="getStudentData($index)" ng-repeat = "stu in searchedStudents" >
+	<td>{{stu.batch}}</td>
+	<td>{{stu.first_name}}</td>	
+</table>
+</div>
+</div>	

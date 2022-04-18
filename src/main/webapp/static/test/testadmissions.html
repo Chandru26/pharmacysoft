@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />  
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deemsoft School & College Software</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-grid/3.1.1/ui-grid.min.css"></link>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-select/0.16.0/select.min.css"></link>
+<link rel="stylesheet" href="/pharmacysoft/static/css/deemsoft/navbar-custom.css"></link>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-animate.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-touch.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.3.2/ui-bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.3.2/ui-bootstrap-tpls.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-grid/3.1.1/ui-grid.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-select/0.16.0/select.min.js"></script>
+
+<script src="/pharmacysoft/static/js/pharmacysoft/app.js"></script>
+<script src="/pharmacysoft/static/js/pharmacysoft/headerController.js"></script> 
+
+</head>
+<body ng-app="pharmacysoft">
+<div class="container-fluid">
+<div ng-controller="headerController">
+<div class="row" ng-show="showTitle" >
+	<div class="col-sm-2">
+	<img src="/pharmacysoft/static/images/customer/logos/logo.jpg" class="img-rounded" height="80" width="90" alt="Company Logo">
+	</div>
+	<div class="col-sm-6">
+	<h3>Indian Institute of Basic Education Society</h3>
+	</div>
+</div>
+</div>
+	
+
+
+
+<div ng-include="'/pharmacysoft/static/templates/pharmacysoft/admissions/admissionMenu.html'"></div>
+<div ng-include="'/pharmacysoft/static/templates/pharmacysoft/admissions/ugadmission.html'"></div>
+</body>
+
+

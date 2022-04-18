@@ -1,0 +1,272 @@
+<script src="/pharmacysoft/static/js/pharmacysoft/InvoicesController.js"></script>
+
+<script type="text/ng-template" id="saveinvoice">	
+		<div class="modal-header text-center" style="background-color:#5389A2">
+			<center><h4 class="modal-title" style="color:white">SAVE</h4></center>
+		</div><br>
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="row">
+					<div class="col-sm-1">					
+					</div>
+					<div class="col-sm-10 text-center">					
+						<span style="color:red;"><strong>Saved Successfully!</strong></span>
+					</div>
+					<div class="col-sm-1">					
+					</div>
+				</div> <br> 
+				<div class="row">
+					<div class="col-sm-6 text-center"> 
+						
+					</div>
+					<div class="col-sm-6 text-right" style="padding-right:30px;">
+						<button class="btn btn-primary" type="button" ng-click="$ctrl.cancel()">Ok</button>
+					</div>
+				</div><br>
+			</div>
+		</div>       
+</script>
+<script type="text/ng-template" id="stockalert">	
+		<div class="modal-header text-center" style="background-color:#5389A2">
+			<center><h4 class="modal-title" style="color:white">STOCK ALERT</h4></center>
+		</div><br>
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="row">
+					<div class="col-sm-1">					
+					</div>
+					<div class="col-sm-10 text-center">					
+						<span style="color:red;"><strong>Out of Stock! Available stock is less than asking Quantity</strong></span>
+					</div>
+					<div class="col-sm-1">					
+					</div>
+				</div> <br> 
+				<div class="row">
+					<div class="col-sm-6 text-center"> 
+						
+					</div>
+					<div class="col-sm-6 text-right" style="padding-right:30px;">
+						<button class="btn btn-primary" type="button" ng-click="$ctrl.cancel()">Ok</button>
+					</div>
+				</div><br>
+			</div>
+		</div>       
+</script>
+
+<script type="text/ng-template" id="stockzeroalert">	
+		<div class="modal-header text-center" style="background-color:#5389A2">
+			<center><h4 class="modal-title" style="color:white">STOCK ALERT</h4></center>
+		</div><br>
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="row">
+					<div class="col-sm-1">					
+					</div>
+					<div class="col-sm-10 text-center">					
+						<span style="color:red;"><strong>Out of Stock! Available Quantity is <b> 0</b></strong></span>
+					</div>
+					<div class="col-sm-1">					
+					</div>
+				</div> <br> 
+				<div class="row">
+					<div class="col-sm-6 text-center"> 
+						
+					</div>
+					<div class="col-sm-6 text-right" style="padding-right:30px;">
+						<button class="btn btn-primary" type="button" ng-click="$ctrl.cancel()">Ok</button>
+					</div>
+				</div><br>
+			</div>
+		</div>       
+</script>
+<style>
+.ui-grid-cell-contents {   
+    text-align: center;
+	
+	
+}
+</style>
+<div ng-controller="InvoicesController">
+<form name="myForm"  novalidate>
+<input type="hidden" id="csrf_token" name="${_csrf.parameterName}" value="${_csrf.token}" >
+<input type="hidden" id="user__id" value="${userid}">
+
+<div class="row">
+<div class="col-sm-4">
+	<ng-click ng-click="showAddress = !showAddress">Customer..+</ng-click><br>	
+	 <div ng-show="!showAddress">	  
+	 <ui-select ng-model="contactsLists.selected" on-select="getAddress($select.selected.firstname, $select.selected.address_id,$select.selected.id,$select.selected.mobile_phone,$select.selected.email)" >
+		<ui-select-match placeholder="Contact Name...">{{$select.selected.firstname}}</ui-select-match>
+		<ui-select-choices 
+			repeat="cont in contactsLists"
+			refresh="refreshSearchContacts($select.search)"
+            refresh-delay="500"	>
+			<div class="row">
+			<div class="col-sm-6" ng-bind-html="cont.firstname | highlight: $select.search"></div>
+			<div class="col-sm-6" ng-bind-html="'ph: '+cont.mobile_phone+' age: '+cont.age"></div>
+			</div>
+			
+		</ui-select-choices>
+	  </ui-select>
+	 </div>
+	 
+	<div ng-show="showAddress">
+		<div class="row">
+			<div class="col-sm-12" ><input ng-model="contactName" placeholder="Name" class="form-control"></div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12" ><input ng-model="Address.address1" placeholder="Address1" class="form-control"></div>
+		</div>
+		<div class="row">
+			<div class="col-sm-6" ><input ng-model="Address.city" placeholder="City" class="form-control"></div>
+			<div class="col-sm-3" ><input ng-model="Address.province" placeholder="State" class="form-control"></div>
+			<div class="col-sm-3" ><input ng-model="Address.zipcode" placeholder="Pin Code" class="form-control"></div>			
+		</div>
+		<div class="row">
+			<div class="col-sm-5" ><input ng-model="email" placeholder="Email" class="form-control"></div>
+			<div class="col-sm-5" ><input ng-model="phone" placeholder="Phone" class="form-control"></div>			
+			<div class="col-sm-2" ><button type="button" class="btn btn-success" ng-click="AddContact()">Add</button></div>
+		</div>
+	</div>
+</div>
+<div class="col-sm-2"></div>
+<div class="col-sm-2">	
+Doctor
+<input ng-disabled="editInvoice" ng-model="referredby" class="form-control" />
+</div>
+<div class="col-sm-2 text-right">	
+Invoice Date
+<input ng-disabled="editInvoice" ng-model="orderDate" readonly class="form-control" />
+</div>
+<div class="col-sm-2 text-right">Invoice No
+<p class="input-group">	 
+	<input class="form-control" ng-model="Invoice_id" name="invoice" />
+		<span class="input-group-btn">	
+		<button type="button" class="btn btn-success"  ng-disabled="!Invoice_id" ng-click="getInvoice()">Get</button>
+		</span>
+	</p>
+</div>
+</div>
+
+
+<div ui-grid='gridOptions' class="gridStyle"  ui-grid-edit ui-grid-cellNav ></div>
+
+<div class="row">
+<div class="col-sm-8"><br>
+	<div class="row"> 
+	<div class="col-sm-4">BarCode </div>
+	<div class="col-sm-4">Product Name </div>	
+	</div>
+	<div class="row">
+	<div class="col-sm-4">
+	
+	<p class="input-group">
+		<input ng-disabled="editInvoice" class="form-control" ng-model="productcode" ng-keypress="($event.charCode == 13 )?getItemData():0" />
+		<span class="input-group-btn">	
+		<button type="button" class="btn btn-success" ng-disabled="!productcode" ng-click="getItemData()">Get</button>
+		</span>
+	</p>
+	</div>
+	<div class="col-sm-4">
+	  <ui-select  ng-disabled="editInvoice" ng-model="partname" on-select="addToList($select.selected.id, $select.selected.barcode, $select.selected.gst,$select.selected.name, $select.selected.expiration, $select.selected.msrp, $select.selected.purchase_price, $select.selected.max_discount, $select.selected.tax, $select.selected.quantity)" >
+		<ui-select-match placeholder="UPC...">{{$select.selected.name}}</ui-select-match>
+		<ui-select-choices 
+			repeat="upc in catalogLists"
+			refresh="refreshSearchProduct($select.search)"
+            refresh-delay="500"	>
+			 <div ng-bind-html="upc.barcode+'  msrp:'+upc.msrp+'  Qty:'+upc.quantity+' '+upc.name | highlight: $select.search"></div>
+		</ui-select-choices>
+	  </ui-select>
+	</div>	
+	</div>
+	<div class="row">
+	<div class="col-sm-8"><br>Note
+		<textarea ng-disabled="editInvoice" ng-model="notes" class="form-control" rows="3"></textarea>
+	</div>
+	</div>
+</div>
+<div class="col-sm-4">
+<br>									   
+<div class="row">
+	<div class="col-sm-6 text-right"><b>GROSS AMOUNT</b></div>
+	<div class="col-sm-6">
+		<input ng-disabled="true" ng-model="grassamount" name="grassamount" required class="form-control text-right" >	
+	</div>	
+</div>
+<!--<div class="row">
+	<div class="col-sm-6 text-right">DISCOUNT</div>
+	<div class="col-sm-6">
+		<input ng-disabled="true" ng-model="discount" class="form-control text-right" >	
+	</div>	
+</div>-->
+<div class="row">
+	<div class="col-sm-6 text-right">CGST</div>
+	<div class="col-sm-6">
+		<input ng-disabled="true" ng-model="cgst" class="form-control text-right" >	
+	</div>	
+</div>
+<div class="row">
+	<div class="col-sm-6 text-right">SGST</div>
+	<div class="col-sm-6">
+		<input ng-disabled="true" ng-model="sgst" class="form-control text-right" >	
+	</div>	
+</div>
+<div class="row">
+	<div class="col-sm-6 text-right"><b>BILL AMOUNT</b></div>
+	<div class="col-sm-6">
+		<input ng-disabled="true" ng-model="grandTotal" class="form-control text-right" >	
+	</div>	
+</div>
+
+<div class="row">
+	<div class="col-sm-6 text-right">PAYMENT METHOD</div>
+	<div class="col-sm-6">
+		<select ng-disabled="editInvoice" ng-model="paymentMethod" placeholder="Payment Method" ng-options="o for o in payoptions" ng-change="onPaymentSelect()" class="form-control"  ></select>		
+	</div>	
+</div>
+
+<div class="row" ng-show="paymentMethod=='Account'">
+	<div class="col-sm-6 text-right">Account ID</div>
+	<div class="col-sm-6">
+		<select ng-disabled="editInvoice" ng-model="accounts_id" ng-options="o.id as o.id+' - '+ o.firstname for o in accounts" class="form-control"  ></select>			
+	</div>	
+</div>
+
+<div class="row" ng-show="paymentMethod=='Check'">
+	<div class="col-sm-6 text-right">Check Number</div>
+	<div class="col-sm-6">
+		<input ng-disabled="editInvoice" ng-model="check_number" class="form-control" >	
+	</div>	
+</div>
+
+<div class="row">
+<div class="col-sm-6 text-right">PAID</div>		
+<div class="col-sm-6">
+		<input ng-model="paid" placeholder="Paid" ng-disabled="paymentSel || editInvoice" ng-change="onPaymentChange()" class="form-control text-right" >
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-6 text-right"><b>BALANCE</b></div>
+	<div class="col-sm-6"><input ng-disabled="true" name="balance" required ng-model="balance" class="form-control text-right"></div>
+</div>
+<br>
+<div class="row">
+<div class="col-sm-4">
+	<button ng-click="newInvoice()" class="btn btn-warning btn-block ">New</button>
+	</div>	
+	<div class="col-sm-4">
+	<button ng-click="printInvoice()"  ng-disabled="print" class="btn btn-success btn-block ">Print</button>
+	</div>
+	<div class="col-sm-4" >
+	<button  ng-disabled="save" ng-click="saveInvoice()" class="btn btn-success btn-block">Save</button>
+	</div>
+	
+</div>
+</div>
+</div>
+
+
+</form>
+<br><br>
+</div>
+

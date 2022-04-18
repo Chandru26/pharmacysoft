@@ -1,0 +1,25 @@
+<div ng-controller="ShipmentsController">
+<form name="myForm"  novalidate>
+<input type="hidden" id="csrf_token" name="${_csrf.parameterName}" value="${_csrf.token}" >
+<input type="hidden" id="user__id" value="${userid}">
+<br><div ng-show="showEditBlock" class="row">
+<div class="col-sm-1"></div><div class="col-sm-10 well">
+<div class="row"><div class="col-sm-8">address_id<input ng-model="Shipments.address_id" class="form-control"></div></div><br>
+<div class="row"><div class="col-sm-8">type<input ng-model="Shipments.type" class="form-control"></div></div><br>
+<div class="row"><div class="col-sm-8">vendor<input ng-model="Shipments.vendor" class="form-control"></div></div><br>
+<div class="row"><div class="col-sm-8">cost<input ng-model="Shipments.cost" class="form-control"></div></div><br>
+<div class="row"><div class="col-sm-8">weight<input ng-model="Shipments.weight" class="form-control"></div></div><br>
+<div class="row"><div class="col-sm-8">hight<input ng-model="Shipments.hight" class="form-control"></div></div><br>
+<div class="row"><div class="col-sm-8">width<input ng-model="Shipments.width" class="form-control"></div></div><br>
+<div class="row"><div class="col-sm-8">length<input ng-model="Shipments.length" class="form-control"></div></div><br>
+<div class="row"><div class="col-sm-8">customs_duty<input ng-model="Shipments.customs_duty" class="form-control"></div></div><br>
+<div class="row"><div class="col-sm-8">customs_notes<input ng-model="Shipments.customs_notes" class="form-control"></div></div><br>
+<div class="col-sm-8"></div>
+<div class="col-sm-3">
+<button ng-click="addNewRecord()" class="btn btn-sm btn-warning">Cancel</button>
+<button ng-click="saveEdits()" class="btn btn-sm btn-success">Save</button>
+<button ng-click="cancelEdits()" class="btn btn-sm btn-warning">Cancel</button>
+</div></div></div>
+<div><br> List<br>
+<div ui-grid='gridOptions'></div>
+</div></form></div>

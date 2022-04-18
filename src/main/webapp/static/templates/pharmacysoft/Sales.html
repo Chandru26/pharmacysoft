@@ -1,0 +1,140 @@
+<script src="/pharmacysoft/static/js/pharmacysoft/SalesController.js"></script>
+<div ng-controller="SalesController">
+<form name="myForm"  novalidate>
+<input type="hidden" id="csrf_token" name="${_csrf.parameterName}" value="${_csrf.token}" >
+<input type="hidden" id="user__id" value="${userid}">
+
+<div class="row">
+<div class="col-sm-4">
+<uib-tabset>
+<uib-tab index="0" heading="Order List">
+
+<div ng-show="invoiceLists.length>0" class=" row well">
+<table class="table table-hover">
+<thead><th>Order NO</th><th>Member Name</th></thead>
+<tbody>
+<tr ng-click="getInvoiceData(inv.id,inv.title)" ng-repeat = "inv in invoiceLists" >
+	<td>{{inv.id}}</td>
+	<td>{{inv.title}}</td>
+</tr>
+</body>	
+</table>
+</div>
+</uib-tab>
+<uib-tab index="1" heading="New Order">
+	<div> <br><br>Select Member<br></div>	
+	<div>	  
+	 <ui-select ng-model="contactsLists.selected" on-select="selectMember($select.selected.firstname, $select.selected.id)" >
+		<ui-select-match placeholder="Member Name...">{{$select.selected.firstname}}</ui-select-match>
+		<ui-select-choices 
+			repeat="cont in contactsLists"
+			refresh="refreshSearchContacts($select.search)"
+            refresh-delay="500"	>
+			<div class="row">
+			<div class="col-sm-6" ng-bind-html="cont.firstname | highlight: $select.search"></div>
+			<div class="col-sm-6" ng-bind-html="'ph: '+cont.mobile_phone+' age: '+cont.age"></div>
+			</div>
+			
+		</ui-select-choices>
+	  </ui-select>
+	 </div>
+	<div>
+		<div class="col-sm-6"></div>
+		<div class="col-sm-6">
+			<br><br>	
+			<button ng-click="createInvoice()" class="btn btn-lg btn-success btn-block ">Create</button>
+		</div>
+	</div>
+</uib-tab>  
+</uib-tabset>
+</div>
+<div class="col-sm-8">
+<div class="row">
+<div class="col-sm-6 text-right"><br><label>Order Details</label><br></div>
+</div>
+<div class="row">
+	<div class="col-sm-5">	
+		<p class="input-group">
+			<input ng-disabled="editInvoice" class="form-control" ng-model="productcode" ng-keypress="($event.charCode == 13 )?getItemData(productcode):0" />
+			<span class="input-group-btn">	
+			<button type="button" class="btn btn-success" 
+				popover-is-open="popProductList" popover-placement="right-top" 
+				uib-popover-template="'/pharmacysoft/static/templates/deemsoft/itemsListTemplate.html'"
+			>Lookup</button>
+			</span>
+		</p>		
+	</div>	
+	<div class="col-sm-3"></div>
+	<div class="col-sm-4">
+		<div class="row">
+			<div class="col-sm-6 text-right">Recipt No : </div>
+			<div class="col-sm-6 "><label>{{Invoice_id}}</label></div>
+		</div>
+		<div class="row">
+			<div class="col-sm-6 text-right">Recipt Date : </div> 
+			<div class="col-sm-6 "><label>{{orderDate}}</label></div>
+		</div>
+	</div>
+</div>
+
+<div ui-grid='gridOptions' class="gridStyle"  ui-grid-edit ui-grid-cellNav ></div>
+
+<div class="row">
+	<div class="col-sm-6"></div>
+	
+	<div class="col-sm-3">
+		<button  ng-disabled="editInvoice" ng-click="saveInvoice()" class="btn btn-lg btn-success btn-block">Pay</button>
+	</div>
+	<div class="col-sm-3">
+		<button ng-click="printInvoice()" class="btn btn-lg btn-warning btn-block ">Print</button>
+	</div>	
+</div>
+
+<div ng-show="showPayOptions">
+<div class="row">
+	<div class="col-sm-6">Payment Method</div>
+	<div class="col-sm-3">Paid</div>
+	<div class="col-sm-3">Balance</div>	
+</div>
+
+<div class="row">
+	<div class="col-sm-6">
+		<select ng-disabled="editInvoice" ng-model="paymentMethod" placeholder="Payment Method" ng-options="o for o in payoptions" ng-change="onPaymentSelect()" class="form-control"  ></select>		
+		
+		<div class="row" ng-show="paymentMethod=='Account'">
+			<div class="col-sm-6 text-right">Account ID</div>
+			<div class="col-sm-6">
+				<select ng-disabled="editInvoice" ng-model="accounts_id" ng-options="o.id as o.id+' - '+ o.firstname for o in accounts" class="form-control"  ></select>			
+			</div>	
+		</div>
+
+		<div class="row" ng-show="paymentMethod=='Check'">
+			<div class="col-sm-6 text-right">Check Number</div>
+			<div class="col-sm-6">
+				<input ng-disabled="editInvoice" ng-model="check_number" class="form-control" >	
+			</div>	
+		</div>
+	</div>
+	<div class="col-sm-3">
+		<input ng-model="paid" placeholder="Paid" ng-disabled="paymentSel || editInvoice" ng-change="onPaymentChange()" class="form-control text-right" >
+	</div>
+	<div class="col-sm-3">
+		<input ng-disabled="true" ng-model="balance" class="form-control text-right">
+	</div>
+</div>	
+
+<div class="row">
+	<div class="col-sm-8"><br>Note
+		<textarea ng-disabled="editInvoice" ng-model="notes" class="form-control" rows="1"></textarea>
+	</div>
+</div>
+<br><br>
+</div>
+</div>
+</div>
+
+
+</form>
+<br><br>
+</div>
+

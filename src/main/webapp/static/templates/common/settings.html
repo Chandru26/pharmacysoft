@@ -1,0 +1,144 @@
+<script src="/pharmacysoft/static/js/common/SettingsController.js"></script>
+
+<div ng-controller="SettingsController">
+<form name="myForm"  novalidate>
+<input type="hidden" id="csrf_token" name="${_csrf.parameterName}" value="${_csrf.token}" >
+<input type="hidden" id="user__id" value="${userid}">	
+
+<uib-tabset>
+    <uib-tab index="0" heading="General Settings">
+	<br>	
+	<br>
+	<div class="row">	
+		<div class="col-sm-1"></div>
+		<div class="col-sm-10 well">
+			<div class="row">
+				<div class="col-sm-5">Time Zone
+					<input ng-model="settings.time_zone" class="form-control">
+				</div>
+				<div class="col-sm-5">Currency
+					<input ng-model="settings.currency" class="form-control">
+				</div>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-sm-8">Address
+					<input ng-model="settings.address" class="form-control">
+				</div>			
+			</div><br>
+			<div class="row">
+				<div class="col-sm-5">Language
+					<input ng-model="settings.app_language" class="form-control">
+				</div>
+			</div><br>
+			<div class="row">
+				<div class="col-sm-5">Logo<br>
+					<img  ng-src="{{settings.logo}}" class="img-thumbnail" /><br>
+					 <input onchange="angular.element(this).scope().fileset()" id="myfile" type="file"/>
+				</div>						
+			</div><br>
+			
+			<div class="row">
+				<div class="col-sm-8"></div>
+				<div class="col-sm-3">
+					<button ng-click="cancelSettings()" class="btn btn-sm btn-warning">Cancel</button>
+					<button ng-click="saveSettings()" class="btn btn-sm btn-success">Save</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	</uib-tab>
+    <uib-tab index="1" heading="Users">
+	<br>
+	<button ng-click="userEditNew()" class="btn btn-xs btn-success">New User</button>	
+	<br>
+	<div ng-show="editUser" class="row">
+		<div class="col-sm-1"></div>
+		<div class="col-sm-10 well">
+			<div class="row">
+				<div class="col-sm-5">User ID
+					<input ng-model="user.ssoId" class="form-control">
+				</div>
+				<div class="col-sm-2"><br>
+					<button ng-click="userResetPass()" class="btn btn-sm btn-danger">Reset Password</button>
+				</div>
+			</div><br>
+			<div class="row">
+				<div class="col-sm-5">State
+					<select ng-model="user.state" class="form-control">
+					<option>Active</option>
+					<option>Inactive</option>
+					</select>
+				</div>
+			</div><br>			
+			<div class="row">
+				<div class="col-sm-5">First Name
+					<input ng-model="user.firstName" class="form-control">
+				</div>
+			</div><br>
+			<div class="row">
+				<div class="col-sm-5">Last Name
+					<input ng-model="user.lastName" class="form-control">
+				</div>
+			</div><br>
+			
+			<div class="row">
+				<div class="col-sm-5">Phone
+					<input ng-model="user.phone" class="form-control">
+				</div>
+			</div><br>
+			<div class="row">
+			<div class="col-sm-5">Email
+				<input ng-model="user.email" class="form-control">
+			</div>
+			</div>
+			<br>			
+			<div class="row">
+				<div class="col-sm-10">Notes
+					<input ng-model="user.notes" class="form-control">
+				</div>
+			</div><br>
+			<div class="row">
+				<div class="col-sm-8"></div>
+				<div class="col-sm-3">
+					<button ng-click="userEditCancel()" class="btn btn-sm btn-warning">Cancel</button>
+					<button ng-click="userEditSave()" class="btn btn-sm btn-success">Save</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div>	
+		<br>
+		Users List	
+		<div>
+		<table class="table table-hover" width="100%">
+			<thead>
+				<th>SL No</th>
+				<th>User ID</th>
+				<th>State</th>				
+				<th>First Name</th>
+				<th>Last Name</th>			
+				<th>Email</th>
+				<th>Phone</th>
+				<th>Notes</th>			
+			</thead>
+			<tbody>
+			<tr ng-click="userSelect($index)" ng-repeat="usr in users">
+				<td>{{$index+1}}</td>
+				<td>{{usr.ssoId}}</td>
+				<td>{{usr.state}}</td>
+				<td>{{usr.firstName}}</td>		
+				<td>{{usr.lastName}}</td>
+				<td>{{usr.email}}</td>
+				<td>{{usr.phone}}</td>		
+				<td>{{usr.notes}}</td>						
+			</tr>
+			</tbody>
+		</table>
+		</div>		
+	</div> 
+	</uib-tab>
+ </uib-tabset>			
+</form>
+</div>

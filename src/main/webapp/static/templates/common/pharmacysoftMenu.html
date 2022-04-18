@@ -1,0 +1,86 @@
+<style type="text/css">
+
+    #printable { display: none; }
+
+    @media print
+    {
+        #non-printable { display: none; }
+        #printable { display: block; }
+    }
+    </style>
+<script src="/pharmacysoft/static/js/pharmacysoft/pharmacysoftMenuController.js"></script> 
+<div ng-controller="pharmacysoftMenuController" id="non-printable">
+<nav class="navbar navbar-custom" role="navigation">
+  
+  <div class="collapse navbar-collapse" ng-class="!navCollapsed && 'in'" ng-click="navCollapsed = true">
+	<ul class="nav navbar-nav">
+	   <li uib-dropdown >
+		<a href="/pharmacysoft/pharma/invoices" >Invoices</a>		
+	  </li>
+	</ul>		
+	<ul class="nav navbar-nav">
+	   <li uib-dropdown >
+		<a href="/pharmacysoft/pharma/purchases">Purchases</a>
+	  </li>
+	</ul>
+	
+	<ul class="nav navbar-nav">
+	   <li uib-dropdown >
+		<a href="/pharmacysoft/pharma/catalogs">Inventory</a>
+	  </li>
+	</ul>	
+	<ul class="nav navbar-nav">
+	   <li uib-dropdown >
+		<a href="/pharmacysoft/pharma/contacts">Contacts</a>
+	  </li>
+	</ul>
+	<ul class="nav navbar-nav">
+	   <li uib-dropdown >
+		<a href="/pharmacysoft/pharma/accounts">Accounts</a>
+	  </li>
+	</ul>	
+	<ul class="nav navbar-nav">
+	   <li uib-dropdown >
+		<a href="/pharmacysoft/pharma/reports" >Reports</a>		
+	  </li>
+	</ul>	
+	<ul class="nav navbar-nav">
+	   <li uib-dropdown >
+		<a href="/pharmacysoft/pharma/settings" >Settings</a>		
+       </li>
+	</ul>
+	<ul class="nav navbar-nav">
+	   <li uib-dropdown >
+		<a href="/pharmacysoft/pharma/printbarcodes">Print Barcodes</a>
+	  </li>
+	</ul>
+	<ul class="nav navbar-nav">
+	   <li uib-dropdown >
+		<a href="/pharmacysoft/pharma/emails" >Emails</a>		
+	  </li>
+	</ul>
+	<ul class="nav navbar-nav">
+	   <li uib-dropdown >
+		<a href="/pharmacysoft/pharma/returnstock" >Return</a>		
+	  </li>
+	</ul>
+	
+	 <ul class="nav navbar-nav navbar-right">
+	   <li uib-dropdown >
+		<a href="#" uib-dropdown-toggle><span class="badge">${user}</span></a>
+		<ul uib-dropdown-menu role="menu" >			
+			<li role="menuitem"><a href="/pharmacysoft/help/help">Help </a></li>
+			<li class="divider"></li>
+			<li role="menuitem"><a href="/pharmacysoft/changepassword" >Change Password</a></li>
+			<li class="divider"></li>
+			<li role="menuitem"><a href="/pharmacysoft/logout"><span class="glyphicon glyphicon-log-out"></span>Logout</b></a>	</li>	
+			</li>
+	  </ul>
+	  </li>	 
+	</ul>	
+   
+  </div>
+</nav>
+</div>
+
+

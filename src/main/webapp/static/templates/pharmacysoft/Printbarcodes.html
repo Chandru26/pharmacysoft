@@ -1,0 +1,29 @@
+<script src="/pharmacysoft/static/js/pharmacysoft/PrintbarcodesController.js"></script>
+
+<div ng-controller="PrintbarcodesController">
+
+<input type="hidden" id="csrf_token" name="${_csrf.parameterName}" value="${_csrf.token}" >
+<input type="hidden" id="user__id" value="${user}" >
+	<form  name="myForm" novalidate>
+	
+		
+		<br><br>
+		
+		<div class="row">
+			<div class="col-xs-3"></div>		
+			
+			<div class="col-xs-3"> <span>Catalog From</span><input class="form-control" type = "number" required name="rtype" ng-model="accnumfrom" ></div>
+			<div class="col-xs-3"> <span>Catalog To</span><input class="form-control" type = "number" required name="rtype" ng-model="accnumto"></div>
+			<div class="col-xs-1 nopadding"><span>.</span><button class="btn btn-success btn-sm btn-block" ng-disabled="myForm.rtype.$error.required || myForm.rtype.$error.required || myForm.rtype.$error.required" ng-click="barcodeprint()">Print</button></div>						
+			 
+		</div>
+		
+		
+		<br><br><br><br><br><br><br>
+				
+	</form>
+	
+</div>
+
+
+

@@ -1,0 +1,402 @@
+<link rel="stylesheet" href="/pharmacysoft/static/css/deemsoft/deemsoftCharts.css"></link>
+<script src="/pharmacysoft/static/js/angular/csv.js"></script>
+<script src="/pharmacysoft/static/js/angular/pdfmake.js"></script>
+<script src="/pharmacysoft/static/js/angular/vfs_fonts.js"></script>
+<script src="/pharmacysoft/static/js/angular/d3.v3.min.js"></script>
+<script src="/pharmacysoft/static/js/deemsoft/d3tip.js"></script>
+<script src="/pharmacysoft/static/js/deemsoft/barchart.js"></script>
+<script src="/pharmacysoft/static/js/deemsoft/Donut3D.js"></script>
+<script src="/pharmacysoft/static/js/pharmacysoft/ReportsController.js"></script>
+<style>
+.ui-grid-footer-panel {
+    text-align: right;
+
+}
+.ui-grid-header-cell {
+	text-align: center;
+}
+</style>
+ <style type="text/css">
+
+    #printable { display: none; }
+
+    @media print
+    {
+        #non-printable { display: none; }
+        #printable { display: block; }
+    }
+    </style>
+<div ng-controller="ReportsController">
+<form name="myForm"  novalidate>
+<div class="text-center"  id="non-printable" > <h3>Reports</h3></div>
+<input type="hidden" id="csrf_token" name="${_csrf.parameterName}" value="${_csrf.token}" />
+<input type="hidden" id="user__id" value="${userid}" />
+<div class="row" id="non-printable"><div class="col-sm-1"></div>			
+	<div class="col-sm-2">From Date<span style="color:red;">*</span><p class="input-group">			 
+         <input ng-model="bd" required name="fromDt" uib-datepicker-popup="{{dateFormat}}"  is-open="status1" datepicker-options="dateOptions" show-button-bar="false" type="text" class="form-control"  ng-model-options="{timezone:'UTC'}"/>
+         <span class="input-group-btn"><button ng-click="open1($event)" class="btn btn-default" ><i class="glyphicon glyphicon-calendar"></i></button></span></p>
+    </div>
+	<div class="col-sm-2">To Date<span style="color:red;">*</span><p class="input-group">			  
+		  <input ng-model="ed" required name="toDt" uib-datepicker-popup="{{dateFormat}}" is-open="status2" datepicker-options="dateOptions" show-button-bar="false" type="text" class="form-control" ng-model-options="{timezone:'UTC'}"/>
+		  <span class="input-group-btn"><button type="button" class="btn btn-default" ng-click="open2($event)"><i class="glyphicon glyphicon-calendar"></i></button></span></p>
+    </div>
+	
+	<div class="col-sm-3">Report Type<span style="color:red;">*</span>
+		<p class="input-group">
+		<select ng-model="report" ng-options="o.id as o.name for o in reportTypes track by o.id" required name="reportType" class="form-control" ></select>
+		<span class="input-group-btn">	
+		<button 
+		ng-click="getReports()"		
+		ng-disabled="myForm.fromDt.$error.required 
+					|| myForm.toDt .$error.required				
+					|| myForm.reportType.$error.required" 
+		class="btn btn-success" >Go</button>
+		</span>		
+		</p>
+	</div>	
+	<div class="col-sm-1"><span style="color:red;"></span><br>
+		<button ng-click="doprint()"  ng-disabled="print" class="btn btn-success btn-block ">Print</button>
+		</span>		
+		</p>
+	</div>
+	<!--div class="col-sm-1"><span style="color:red;"></span><br>
+		<button ng-click="sendemail()"  ng-disabled="print" class="btn btn-success btn-block ">Send Mail</button>
+		</span>		
+		</p>
+	</div-->
+</div>
+<br> 
+<div class="row" id="printable">
+	<div class="col-sm-12 text-center">
+	|| Jai Sri Gurudev ||</b><br>Sri Adichunchanagiri Shikshana Trust (R)<br><span style="font-family: Friz quadrata BT !important;">ADICHUNCHANAGIRI AYURVEDIC MEDICAL COLLEGE, HOSPITAL AND RESEARCH CENTER</span>(<span style="font-family:Colonna MT;font-size:18px !important;">A</span><span style=" font-family:Bookman Old Style !important;">MC</span>)<br>Nagarur, Bengaluru - 562 123<br>Ph.No : +91 9481861519, Email : principal@amc.org.in</br>  www.amc.org.in<br><br>
+
+	</div>
+</div>
+<div class="text-center"><b>{{reportType}}</b></div>
+<div class="row" >
+	<div class="col-sm-1 "></div>
+	<div class="col-sm-10 ">
+		<table class="table table-striped table-bordered table-hover" style=" font-family:calibri; font-size:15px;"ng-show="showinvoice">
+				<thead>
+				<tr>			
+					<th style="text-align:center;">INVOICE NO</th>
+					<th style="text-align:center;">INVOICE DATE</th>
+					<th style="text-align:center;"> NAME</th>
+					<th style="text-align:right;"> AMOUNT</th>					
+					<th style="text-align:right;">CGST</th>					
+					<th style="text-align:right;">SGST</th>					
+					<th style="text-align:right;">PAID</th>					
+					<th style="text-align:right;">BALANCE</th>					
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="rep in reportinvoiceinfo" >						
+					<td style="text-align:center;">{{rep.id}} </td>
+					<td style="text-align:center;">{{rep.invoice_date | date:"dd-MM-yyyy"}} </td>
+					<td style="text-align:left;">{{rep.title}} </td>
+					<td style="text-align:right;">{{rep.total}} </td>					
+					<td style="text-align:right;">{{rep.cgst_amount}} </td>						
+					<td style="text-align:right;">{{rep.sgst_amount}} </td>						
+					<td style="text-align:right;">{{rep.paid}} </td>						
+					<td style="text-align:right;">{{rep.balance}} </td>						
+				</tr>
+				<tr >						
+					<td style="text-align:left;" colspan="3"></td>
+					<td style="text-align:right;">{{invoicetotal |  number : 2}} </td>				
+					<td style="text-align:right;">{{invoiccecgst_amount |  number : 2}} </td>		
+					<td style="text-align:right;">{{nvoicesgst_amount |  number : 2}} </td>			
+					<td style="text-align:right;">{{invpaid | number : 2}} </td>					
+					<td style="text-align:right;">{{invbalance | number : 2}} </td>					
+				</tr>
+				<tr >						
+					<td style="text-align:center;" colspan="3"><b> RETURNSTOCK DETAILS</b></td>		
+					<td style="text-align:right;">{{returntotal |  number : 2}} </td>				
+					<td style="text-align:right;">{{returncgst_amount |  number : 2}} </td>			
+					<td style="text-align:right;">{{returnsgst_amount |  number : 2}} </td>			
+					<td style="text-align:right;">{{retpaid | number : 2}} </td>					
+					<td style="text-align:right;">{{retbalance | number : 2}} </td>						
+				</tr>
+				<tr >						
+					<td style="text-align:left;" colspan="3"></td>
+					<td style="text-align:right;">{{finalinvoicetotal |  number : 2}} </td>				
+					<td style="text-align:right;">{{finalinvoiccecgst_amount |  number : 2}} </td>		
+					<td style="text-align:right;">{{finalnvoicesgst_amount |  number : 2}} </td>			
+					<td style="text-align:right;">{{finalinvpaid | number : 2}} </td>					
+					<td style="text-align:right;">{{finalinvbalance | number : 2}} </td>							
+				</tr>
+			</tbody>
+		</table>
+		<table class="table table-striped table-bordered table-hover" style=" font-family:calibri; font-size:15px;"ng-show="showpurchase">
+			<thead>
+				<tr>			
+					<th style="text-align:center;">NUM</th>
+					<th style="text-align:center;">NAME</th>
+					<th style="text-align:right;">GROSS AMOUNT</th>
+					<th style="text-align:right;">DISCOUNT</th>
+					<th style="text-align:right;">CGST</th>					
+					<th style="text-align:right;">SGST</th>	
+					<th style="text-align:right;">PURCHASE AMOUNT</th>
+					<th style="text-align:right;">PAID</th>					
+					<th style="text-align:right;">BALANCE</th>	
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="rep in reportpurchaseinfo" >						
+					<td style="text-align:left;">{{rep.id}} </td>
+					<td style="text-align:left;">{{rep.title}} </td>
+					<td style="text-align:right;">{{rep.total}} </td>
+					<td style="text-align:right;">{{rep.discount}} </td>
+					<td style="text-align:right;">{{rep.cgst_amount}} </td>						
+					<td style="text-align:right;">{{rep.sgst_amount}} </td>	
+					<td style="text-align:right;">{{rep.billamount}} </td>	
+					<td style="text-align:right;">{{rep.paid}} </td>						
+					<td style="text-align:right;">{{rep.balance}} </td>	
+				</tr>
+				<tr >						
+					<td style="text-align:left;"> </td>
+					<td style="text-align:left;"></td>
+					<td style="text-align:right;">{{purtotal |  number : 2}} </td>
+					<td style="text-align:right;">{{purdiscount |  number : 2}} </td>
+					<td style="text-align:right;">{{purcgst_amount |  number : 2}} </td>						
+					<td style="text-align:right;">{{pursgst_amount |  number : 2}} </td>	
+					<td style="text-align:right;">{{purbillamount | number : 2}} </td>	
+					<td style="text-align:right;">{{purpaid |  number : 2}} </td>						
+					<td style="text-align:right;">{{purbalance |  number : 2}} </td>	
+				</tr>
+			</tbody>
+		</table>
+		<table class="table table-striped table-bordered table-hover" style=" font-family:calibri; font-size:15px;"ng-show="showstock">
+			<thead>
+				<tr>			
+					<th style="text-align:center;">BARCODE</th>
+					<th style="text-align:center;">PRODUCT NAME</th>
+					<th style="text-align:right;">SOLD QUANTITY</th>
+					<th style="text-align:right;">PURCHASED QUANTITY</th>
+					<th style="text-align:right;">AVAILABLE QUANTITY</th>					
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="rep in reportinfo" >						
+					<td style="text-align:left;">{{rep.batchno}} </td>
+					<td style="text-align:left;">{{rep.name}} </td>
+					<td style="text-align:right;">{{rep.sold_quantity}} </td>
+					<td style="text-align:right;">{{rep.purchased_quantity}} </td>
+					<td style="text-align:right;">{{rep.available_quantity}} </td>						
+				</tr>
+				<tr >						
+					<td style="text-align:left;"></td>
+					<td style="text-align:left;"></td>
+					<td style="text-align:right;">{{stocksold_quantity |  number : 2}} </td>
+					<td style="text-align:right;">{{stockpurchased_quantity |  number : 2}} </td>
+					<td style="text-align:right;">{{stockavailable_quantity | number : 2}} </td>						
+				</tr>
+			</tbody>
+		</table>	
+		<table class="table table-striped table-bordered table-hover" style=" font-family:calibri; font-size:15px;"ng-show="showcatlog">
+			<thead>
+				<tr>			
+					<th style="text-align:center;">BARCODE</th>
+					<th style="text-align:center;"> NAME</th>
+					<th style="text-align:center;"> DISCRIPTION</th>
+					<th style="text-align:center;">EXPIRATION</th>
+					<th style="text-align:right;"> QUANTITY</th>					
+					<th style="text-align:right;"> MSRP</th>					
+					<th style="text-align:right;"> P PRICE</th>					
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="rep in catloginfo" >						
+					<td style="text-align:left;">{{rep.barcode}} </td>
+					<td style="text-align:left;">{{rep.name}} </td>
+					<td style="text-align:left;">{{rep.description}} </td>
+					<td style="text-align:left;">{{rep.expiration}} </td>
+					<td style="text-align:right;">{{rep.quantity}} </td>						
+					<td style="text-align:right;">{{rep.msrp}} </td>						
+					<td style="text-align:right;">{{rep.purchase_price}} </td>						
+				</tr>
+				<tr >						
+					<td style="text-align:left;"></td>
+					<td style="text-align:left;"></td>
+					<td style="text-align:right;"> </td>
+					<td style="text-align:right;"> </td>
+					<td style="text-align:right;">{{cat_quantity |  number : 2}} </td>						
+					<td style="text-align:right;">{{catmsrp |  number : 2}} </td>						
+					<td style="text-align:right;">{{catpurprice |  number : 2}} </td>						
+				</tr>
+			</tbody>
+		</table>	
+		
+		<table class="table table-striped table-bordered table-hover" style=" font-family:calibri; font-size:15px;"ng-show="showcontact">
+			<thead>
+				<tr>			
+					<th style="text-align:center;">TITLE</th>
+					<th style="text-align:center;"> NAME</th>
+					<th style="text-align:center;"> COMPANY</th>
+					<th style="text-align:center;">PHONE</th>
+					<th style="text-align:center;"> EMAIL</th>		
+								
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="rep in contactinfo" >						
+					<td style="text-align:left;">{{rep.title}} </td>
+					<td style="text-align:left;">{{rep.firstname}} </td>
+					<td style="text-align:left;">{{rep.company}} </td>
+					<td style="text-align:center;">{{rep.mobile_phone}} </td>
+					<td style="text-align:left;">{{rep.email}} </td>						
+											
+				</tr>
+				
+			</tbody>
+		</table>
+		<table class="table table-striped table-bordered table-hover" style=" font-family:calibri; font-size:15px;"ng-show="showaccount">
+			<thead>
+				<tr>			
+					<th style="text-align:center;">TITLE</th>
+					<th style="text-align:center;"> NAME</th>
+					<th style="text-align:center;"> COMPANY</th>
+					<th style="text-align:center;">PHONE</th>
+					<th style="text-align:right;"> EMAIL</th>		
+								
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="rep in accountinfo" >						
+					<td style="text-align:left;">{{rep.title}} </td>
+					<td style="text-align:left;">{{rep.firstname}} </td>
+					<td style="text-align:left;">{{rep.company}} </td>
+					<td style="text-align:left;">{{rep.phone}} </td>
+					<td style="text-align:right;">{{rep.email}} </td>										
+				</tr>
+				
+			</tbody>
+		</table>
+		<!--<table class="table table-striped table-bordered table-hover" style=" font-family:calibri; font-size:15px;"ng-show="showsales">
+				<thead>
+				<tr>			
+					<th style="text-align:center;">INVOICE ID</th>
+					<th style="text-align:center;">INVOICE DATE</th>
+					<th style="text-align:center;"> BARCODE</th>
+					<th style="text-align:center;"> NAME</th>					
+					<th style="text-align:center;">QUANTITY</th>					
+					<th style="text-align:right;">SGST</th>					
+					<th style="text-align:right;">PAID</th>					
+					<th style="text-align:right;">BALANCE</th>					
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="rep in reportinvoiceinfo" >						
+					<td style="text-align:center;">{{rep.id}} </td>
+					<td style="text-align:center;">{{rep.invoice_date | date:"dd-MM-yyyy"}} </td>
+					<td style="text-align:center;">{{rep.barcode}} </td>
+					<td style="text-align:left;">{{rep.name}} </td>					
+					<td style="text-align:center;">{{rep.quantity}} </td>						
+					<td style="text-align:right;">{{rep.sgst_amount}} </td>						
+					<td style="text-align:right;">{{rep.paid}} </td>						
+					<td style="text-align:right;">{{rep.balance}} </td>						
+				</tr>
+				<tr >						
+					<td style="text-align:left;"></td>
+					<td style="text-align:left;"></td>
+					<td style="text-align:left;"></td>
+					<td style="text-align:right;">{{invoicetotal |  number : 2}} </td>				
+					<td style="text-align:right;">{{invoiccecgst_amount |  number : 2}} </td>						
+					<td style="text-align:right;">{{nvoicesgst_amount |  number : 2}} </td>						
+					<td style="text-align:right;">{{invpaid | number : 2}} </td>						
+					<td style="text-align:right;">{{invbalance | number : 2}} </td>						
+				</tr>
+			</tbody>
+		</table>-->
+		<div ng-show="showsales">
+			<div ng-if="showsales" >				
+				<div  ui-grid='salesreport' ui-grid-pinning ui-grid-selection ui-grid-exporter class="grid" ></div>
+			</div>
+		</div>
+		<table class="table table-striped table-bordered table-hover" style=" font-family:calibri; font-size:15px;"ng-show="showlowstock">
+			<thead>
+				<tr>			
+					<th style="text-align:center;">Sl. No</th>
+					<th style="text-align:center;">BARCODE</th>
+					<th style="text-align:center;">PRODUCT NAME</th>
+					<!--th style="text-align:right;">SOLD QUANTITY</th>
+					<th style="text-align:right;">PURCHASED QUANTITY</th-->
+					<th style="text-align:right;">AVAILABLE QUANTITY</th>					
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="rep in reportinfo" >						
+					<td style="text-align:center;">{{$index + 1}} </td>
+					<td style="text-align:left;">{{rep.batchno}} </td>
+					<td style="text-align:left;">{{rep.name}} </td>
+					<!--td style="text-align:right;">{{rep.sold_quantity}} </td>
+					<td style="text-align:right;">{{rep.purchased_quantity}} </td-->
+					<td style="text-align:right;">{{rep.available_quantity}} </td>						
+				</tr>
+				<!--tr >						
+					<td style="text-align:left;"></td>
+					<td style="text-align:left;"></td>
+					<td style="text-align:left;"></td>
+					<td style="text-align:right;">{{stocksold_quantity |  number : 2}} </td>
+					<td style="text-align:right;">{{stockpurchased_quantity |  number : 2}} </td>
+					<td style="text-align:right;">{{stockavailable_quantity | number : 2}} </td>						
+				</tr-->
+			</tbody>
+		</table>
+		
+		<div ng-show="showfastmovingstock">
+			<div ng-if="showfastmovingstock" >				
+				<div  ui-grid='fastOptions' ui-grid-pinning ui-grid-selection ui-grid-exporter class="grid" ></div>
+			</div>
+		</div>
+		
+		<table class="table table-striped table-bordered table-hover" style=" font-family:calibri; font-size:15px;"ng-show="showreturnstock">
+				<thead>
+				<tr>			
+					<th style="text-align:center;">RETURN NO</th>
+					<th style="text-align:center;">RETURN DATE</th>
+					<th style="text-align:center;"> NAME</th>
+					<th style="text-align:right;"> AMOUNT</th>					
+					<th style="text-align:right;">CGST</th>					
+					<th style="text-align:right;">SGST</th>					
+					<th style="text-align:right;">PAID</th>					
+					<th style="text-align:right;">BALANCE</th>					
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="rep in reportreturnstockinfo" >						
+					<td style="text-align:center;">{{rep.id}} </td>
+					<td style="text-align:center;">{{rep.return_date | date:"dd-MM-yyyy"}} </td>
+					<td style="text-align:left;">{{rep.title}} </td>
+					<td style="text-align:right;">{{rep.total}} </td>					
+					<td style="text-align:right;">{{rep.cgst_amount}} </td>						
+					<td style="text-align:right;">{{rep.sgst_amount}} </td>						
+					<td style="text-align:right;">{{rep.paid}} </td>						
+					<td style="text-align:right;">{{rep.balance}} </td>						
+				</tr>
+				<tr >						
+					<td style="text-align:left;"></td>
+					<td style="text-align:left;"></td>
+					<td style="text-align:left;"></td>
+					<td style="text-align:right;">{{returntotal |  number : 2}} </td>				
+					<td style="text-align:right;">{{returncgst_amount |  number : 2}} </td>						
+					<td style="text-align:right;">{{returnsgst_amount |  number : 2}} </td>						
+					<td style="text-align:right;">{{retpaid | number : 2}} </td>						
+					<td style="text-align:right;">{{retbalance | number : 2}} </td>						
+				</tr>				
+			</tbody>
+		</table>
+</div>
+</div>
+
+<!--<div id="printable">
+      
+<div class="text-center"><b>{{reportType}}</b></div>
+<div ng-if="gridOptions.data.length>0">
+	<div  ui-grid='gridOptions' ui-grid-pinning ui-grid-selection ui-grid-exporter class="grid" ></div>
+</div> 
+  
+    </div>-->
+<br><br>  
+</form>
+
+</div>

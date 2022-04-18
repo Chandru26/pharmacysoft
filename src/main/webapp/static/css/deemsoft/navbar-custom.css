@@ -1,0 +1,107 @@
+ div.navbar-collapse.collapse {
+    	display: block;
+    	overflow: hidden;
+    	max-height: 0px;
+    	-webkit-transition: max-height .3s ease;
+    	-moz-transition: max-height .3s ease;
+    	-o-transition: max-height .3s ease;
+    	transition: max-height .3s ease;
+    }
+div.navbar-collapse.collapse.in {
+	max-height: 2000px;
+}
+
+.login-container {
+    margin-top: 100px;
+    background-color: floralwhite;
+    width: 40%;
+    left: 30%;
+    position: absolute;
+}
+
+.login-card {
+    width: 80%;
+    margin: auto;
+}
+.login-form {
+    padding: 10%;
+}
+
+
+.navbar-custom {
+    color: #FFFFFF;
+    background-color: #2f6fa2;
+}
+.navbar-custom a {
+    color: #fff;
+}
+.navbar-custom a:hover,
+.navbar-custom a:focus {
+  color: #2f6fa2;
+}
+
+.navbar-custom .navbar-nav > .open > a,
+.navbar-custom .navbar-nav > .open > a:hover,
+.navbar-custom .navbar-nav > .open > a:focus {
+  color: #fff;
+  background-color: #2f6fa2;
+}
+
+
+.navbar-custom .navbar-nav > li > .dropdown-menu {
+  background-color: #2f6fa2;
+}
+.navbar-custom .navbar-nav > li > .dropdown-menu > li > a {
+  color: #ecf0f1;
+}
+.navbar-custom .navbar-nav > li > .dropdown-menu > li > a:hover,
+.navbar-custom .navbar-nav > li > .dropdown-menu > li > a:focus {
+  color: #000000;
+  background-color: #ffffff;
+}
+.navbar-custom .navbar-nav > li > .dropdown-menu > li > .divider {
+  background-color: #ffffff;
+}
+.navbar-custom .navbar-nav .open .dropdown-menu > .active > a,
+.navbar-custom .navbar-nav .open .dropdown-menu > .active > a:hover,
+.navbar-custom .navbar-nav .open .dropdown-menu > .active > a:focus {
+  color: #000000;
+  background-color: #ffffff;
+}
+.navbar-custom .navbar-nav > .active > a,
+.navbar-custom .navbar-nav > .active > a:hover,
+.navbar-custom .navbar-nav > .active > a:focus {
+  color: #000000;
+  background-color: #ffffff;
+}
+.navbar-custom .navbar-nav > .open > a,
+.navbar-custom .navbar-nav > .open > a:hover,
+.navbar-custom .navbar-nav > .open > a:focus {
+  color: #000000;
+  background-color: #ffffff;
+}
+.navbar-custom .navbar-toggle {
+  border-color: #ffffff;
+}
+.navbar-custom .navbar-toggle:hover,
+.navbar-custom .navbar-toggle:focus {
+  background-color: #ffffff;
+}
+.navbar-custom .navbar-toggle .icon-bar {
+  background-color: #ecf0f1;
+}
+.navbar-custom .navbar-collapse,
+.navbar-custom .navbar-form {
+  border-color: #ecf0f1;
+}
+.navbar-custom .navbar-link {
+  color: #ecf0f1;
+}
+.navbar-custom .navbar-link:hover {
+  color: #000000;
+}
+.nopadding {
+   padding: 1px !important;
+   margin: 0 !important;
+}
+

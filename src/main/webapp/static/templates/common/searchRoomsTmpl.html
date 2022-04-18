@@ -1,0 +1,34 @@
+<style>
+	.popover {
+		max-width: 900px;
+	}
+	.popover-content {
+		width: 850px;
+	}
+</style>
+
+<div class="row">							
+	<div class="col-xs-3" >From Date<span style="color:red;">*</span>		
+		<p class="input-group">	 	 
+		  <input ng-model="checkin" type="text" name="from_date" class="form-control"  show-button-bar="false" is-open="status1" uib-datepicker-popup="{{dateFormat}}"  datepicker-options="dateOptions">
+		  <span class="input-group-btn">	
+			<button type="button" class="btn btn-default" ng-click="open1($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+		  </span>
+		</p>
+	</div>				
+	<div class="col-xs-3" >To Date<span style="color:red;">*</span>		
+		<p class="input-group">	 	 
+		  <input ng-model="checkout" type="text" name="to_date" class="form-control"  show-button-bar="false" is-open="status2" uib-datepicker-popup="{{dateFormat}}"  datepicker-options="dateOptions">
+		  <span class="input-group-btn">	
+			<button type="button" class="btn btn-default" ng-click="open2($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+		  </span>
+		</p>
+	</div>							
+	<div class="col-xs-1"><br>
+		<button class="btn btn-success" ng-click="searchAvailableRooms()">Search</button>
+	</div>						
+</div>
+<div  ng-if="availableRooms.length>0" class="well">	
+	<div  ui-grid='gridOptions'></div>
+</div> 		
+

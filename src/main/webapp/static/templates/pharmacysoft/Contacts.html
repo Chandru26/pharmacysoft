@@ -1,0 +1,72 @@
+<script src="/pharmacysoft/static/js/pharmacysoft/ContactsController.js"></script>
+
+<div ng-controller="ContactsController">
+<form name="myForm"  novalidate>
+<input type="hidden" id="csrf_token" name="${_csrf.parameterName}" value="${_csrf.token}" >
+<input type="hidden" id="user__id" value="${userid}">
+<div class="well">
+<div class="row">
+<form name="cantactform">
+	<div class="col-sm-1">Title<select ng-model="Contacts.title" ng-options="o for o in titles" class="form-control"></select></div>
+	<div class="col-sm-3">Name	
+	<div ng-show="!newRecord">	
+	 <ui-select ng-model="ContactsList.selected" on-select="getContact($select.selected.id)" >
+		<ui-select-match placeholder="Contact Name...">{{$select.selected.firstname}}</ui-select-match>
+		<ui-select-choices 
+			repeat="cont in ContactsList"
+			refresh="refreshSearchContacts($select.search)"
+            refresh-delay="500"	>
+			<div class="row">
+			<div class="col-sm-6" ng-bind-html="cont.firstname | highlight: $select.search"></div>
+			<div class="col-sm-6" ng-bind-html="'ph: '+cont.mobile_phone+' age: '+cont.age"></div>
+			</div>			
+		</ui-select-choices>
+	  </ui-select>
+	  </div>
+	  <div  ng-show="newRecord">
+		<input ng-model="Contacts.firstname" name="firstname" required class="form-control">
+		</div>
+	</div>
+	
+	
+	<div class="col-sm-2">Email<input ng-model="Contacts.email" type="email" name="email"  class="form-control" ></div>
+	<div class="col-sm-2">Phone<input ng-model="Contacts.mobile_phone" name="phone" required class="form-control"></div>
+	<div class="col-sm-3">Company<input ng-model="Contacts.company" name="company" required class="form-control"></div>
+	</form>
+</div>
+<br>
+<a ng-click="moreDetails = !moreDetails">More Details</a>
+<div ng-show="moreDetails">
+	<div class="row">
+		<div class="col-sm-2">Home Phone<input ng-model="Contacts.home_phone" class="form-control"></div>
+		<div class="col-sm-2">Office Phone<input ng-model="Contacts.office_phone" class="form-control"></div>
+		<div class="col-sm-2">Emergency Contact<input ng-model="Contacts.emergency_contactno" class="form-control"></div>
+		<div class="col-sm-2">Referedby<input ng-model="Contacts.referedby" class="form-control"></div>
+		<div class="col-sm-2">Contact Type<input ng-model="Contacts.contact_type" class="form-control"></div>
+		<div class="col-sm-2">Occupation<input ng-model="Contacts.occupation" class="form-control"></div>
+		
+	</div>
+	<div class="row">
+		<div class="col-sm-1">Income<input ng-model="Contacts.income" class="form-control"></div>
+		<div class="col-sm-1">Age<input ng-model="Contacts.age" class="form-control"></div>
+		<div class="col-sm-3">Address<input ng-model="Address.Address1" class="form-control"></div>
+		<div class="col-sm-2">City<input ng-model="Address.city" class="form-control"></div>
+		<div class="col-sm-2">State<input ng-model="Address.state" class="form-control"></div>
+		<div class="col-sm-1">Pin Code<input ng-model="Address.country" class="form-control"></div>
+
+	</div>
+</div>
+</div>
+
+<div class="row">
+<div class="col-sm-6"></div>
+<div class="col-sm-3">
+	<button ng-click="addNewRecord()" class="btn btn-sm btn-success">New</button>
+	<button ng-click="saveEdits()" ng-disabled="disabledcontact" ng-show ="showdisabledcontact" class="btn btn-sm btn-success">Save</button>
+	<button ng-click="saveEdits()" ng-disabled="!Contacts.firstname || !Contacts.email || !Contacts.mobile_phone " ng-show ="shownewdisabledcontact" class="btn btn-sm btn-success">Save</button>
+	<button ng-click="cancelEdits()" class="btn btn-sm btn-warning">Cancel</button>
+</div>
+<br><br>
+</div>
+
+</form></div>

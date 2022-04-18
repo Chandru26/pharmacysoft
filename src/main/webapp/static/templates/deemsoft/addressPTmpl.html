@@ -1,0 +1,37 @@
+<style>
+	.popover {
+		max-width: 800px;
+	}
+	.popover-content {
+		width: 800px;
+	}
+</style>
+
+	<div class="row nopadding">			
+		  <div class="col-xs-3">Address
+			<input type="text" ng-model="studentPAddress.address1" required name="address1" class="form-control">
+		</div>
+		
+		 <div class="col-xs-2">City
+		  <input type="text" ng-model="studentPAddress.city"  required name="city" class="form-control">
+		 </div>
+		  
+		  <div class="col-xs-2">State
+			<select ng-options="o.name for o in provinces" required name="state" class="form-control"  
+				ng-model="studentPAddress.province" >
+			</select>	
+		  </div>
+		 <div class="col-xs-2">pincode
+			<input type="text" ng-model="studentPAddress.zipcode" class="form-control">
+		</div>
+		<div class="col-xs-2">Country
+		<p class="input-group"> <span class="input-group-btn">
+			<select ng-options="o.name for o in countrys" required name="country" class="form-control"  
+				ng-model="studentPAddress.country" >
+			</select>
+			<button type="button" class="btn btn-success" ng-click="setPAddress()" >OK</button>
+		</span>	</p>
+		</div>
+		
+	</div>
+		

@@ -1,0 +1,18 @@
+<div ng-controller="PaymentsController">
+<form name="myForm"  novalidate>
+<input type="hidden" id="csrf_token" name="${_csrf.parameterName}" value="${_csrf.token}" >
+<input type="hidden" id="user__id" value="${userid}">
+<br><div ng-show="showEditBlock" class="row">
+<div class="col-sm-1"></div><div class="col-sm-10 well">
+<div class="row"><div class="col-sm-8">address_id<input ng-model="Payments.address_id" class="form-control"></div></div><br>
+<div class="row"><div class="col-sm-8">payment_type<input ng-model="Payments.payment_type" class="form-control"></div></div><br>
+<div class="row"><div class="col-sm-8">payment<input ng-model="Payments.payment" class="form-control"></div></div><br>
+<div class="col-sm-8"></div>
+<div class="col-sm-3">
+<button ng-click="addNewRecord()" class="btn btn-sm btn-warning">Cancel</button>
+<button ng-click="saveEdits()" class="btn btn-sm btn-success">Save</button>
+<button ng-click="cancelEdits()" class="btn btn-sm btn-warning">Cancel</button>
+</div></div></div>
+<div><br> List<br>
+<div ui-grid='gridOptions'></div>
+</div></form></div>

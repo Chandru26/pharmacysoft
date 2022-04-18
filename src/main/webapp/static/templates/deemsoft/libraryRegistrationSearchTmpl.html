@@ -1,0 +1,44 @@
+<style>
+	.popover {
+		max-width: 700px;
+	}
+	.popover-content {
+		width: 700px;
+	}
+</style>
+<div class="row">				
+		<div class="col-xs-3 nopadding" >Card ID		
+			<input required  name="cardid" class="form-control"  ng-model="libraryRegistration.cardid" >
+				
+		</div>	
+		<div class="col-xs-4 nopadding" >Student Name		
+			<input required name="first_name" class="form-control"  ng-model="libraryRegistration.first_name" >
+		</div>		
+		<div class="col-xs-1 nopadding" ><br>
+			<button type="button" class="btn btn-primary" 
+			ng-disabled="myForm.cardid.$error.required 
+			&& myForm.first_name.$error.required"			
+			ng-click="searchLibraryMembershipData()" >GO</button>
+		</div>
+</div><br>
+
+<div class="row">	
+	<div class="wrap" style="max-height: 700px; max-width: 700px; width: 700px; height: 200px; overflow-y: auto;">      
+		<table class="table">
+			 <thead>
+				<tr>
+					<th>Cardid
+					</th>
+					<th>Name
+					</th>					
+				</tr>
+			 </thead>
+			 <tbody>
+				<tr ng-click="getMembershipData($index)" ng-repeat = "mem in searchedMemberships" >
+					<td>{{mem.cardid}}</td>
+					<td>{{mem.first_name}}</td>	
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

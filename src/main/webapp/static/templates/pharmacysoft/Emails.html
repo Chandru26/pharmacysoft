@@ -1,0 +1,118 @@
+<script src="/pharmacysoft/static/js/pharmacysoft/EmailsController.js"></script>
+
+<script type="text/ng-template" id="saveinvoice">	
+		<div class="modal-header text-center" style="background-color:#5389A2">
+			<center><h4 class="modal-title" style="color:white">SAVE</h4></center>
+		</div><br>
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="row">
+					<div class="col-sm-1">					
+					</div>
+					<div class="col-sm-10 text-center">					
+						<span style="color:red;"><strong>Saved Successfully!</strong></span>
+					</div>
+					<div class="col-sm-1">					
+					</div>
+				</div> <br> 
+				<div class="row">
+					<div class="col-sm-6 text-center"> 
+						
+					</div>
+					<div class="col-sm-6 text-right" style="padding-right:30px;">
+						<button class="btn btn-primary" type="button" ng-click="$ctrl.cancel()">Ok</button>
+					</div>
+				</div><br>
+			</div>
+		</div>       
+</script>
+<script type="text/ng-template" id="stockalert">	
+		<div class="modal-header text-center" style="background-color:#5389A2">
+			<center><h4 class="modal-title" style="color:white">STOCK ALERT</h4></center>
+		</div><br>
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="row">
+					<div class="col-sm-1">					
+					</div>
+					<div class="col-sm-10 text-center">					
+						<span style="color:red;"><strong>Out of Stock! Available stock is less than asking Quantity</strong></span>
+					</div>
+					<div class="col-sm-1">					
+					</div>
+				</div> <br> 
+				<div class="row">
+					<div class="col-sm-6 text-center"> 
+						
+					</div>
+					<div class="col-sm-6 text-right" style="padding-right:30px;">
+						<button class="btn btn-primary" type="button" ng-click="$ctrl.cancel()">Ok</button>
+					</div>
+				</div><br>
+			</div>
+		</div>       
+</script>
+
+<script type="text/ng-template" id="stockzeroalert">	
+		<div class="modal-header text-center" style="background-color:#5389A2">
+			<center><h4 class="modal-title" style="color:white">STOCK ALERT</h4></center>
+		</div><br>
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="row">
+					<div class="col-sm-1">					
+					</div>
+					<div class="col-sm-10 text-center">					
+						<span style="color:red;"><strong>Out of Stock! Available Quantity is <b> 0</b></strong></span>
+					</div>
+					<div class="col-sm-1">					
+					</div>
+				</div> <br> 
+				<div class="row">
+					<div class="col-sm-6 text-center"> 
+						
+					</div>
+					<div class="col-sm-6 text-right" style="padding-right:30px;">
+						<button class="btn btn-primary" type="button" ng-click="$ctrl.cancel()">Ok</button>
+					</div>
+				</div><br>
+			</div>
+		</div>       
+</script>
+<style>
+.ui-grid-cell-contents {   
+    text-align: center;
+}
+</style>
+<div ng-controller="EmailsController">
+<form name="myForm"  novalidate>
+<input type="hidden" id="csrf_token" name="${_csrf.parameterName}" value="${_csrf.token}" >
+<input type="hidden" id="user__id" value="${userid}">
+<br><br>
+<div class="row">
+
+	<div class="col-sm-2"></div>
+
+	<div class="col-sm-2">From Date<span style="color:red;">*</span><p class="input-group">			 
+         <input ng-model="bd" required name="fromDt" uib-datepicker-popup="{{dateFormat}}"  is-open="status1" datepicker-options="dateOptions" show-button-bar="false" type="text" class="form-control" />
+         <span class="input-group-btn"><button ng-click="open1($event)" class="btn btn-default" ><i class="glyphicon glyphicon-calendar"></i></button></span></p>
+    </div>
+	<div class="col-sm-2">To Date<span style="color:red;">*</span><p class="input-group">			  
+		  <input ng-model="ed" required name="toDt" uib-datepicker-popup="{{dateFormat}}" is-open="status2" datepicker-options="dateOptions" show-button-bar="false" type="text" class="form-control" />
+		  <span class="input-group-btn"><button type="button" class="btn btn-default" ng-click="open2($event)"><i class="glyphicon glyphicon-calendar"></i></button></span></p>
+    </div>
+
+	<div class="col-sm-2"><span style="color:red;"></span><br>
+		<button class="btn btn-success btn-block" ng-click="sendinvoicesum()">Invoice Summary</button>		
+	</div>
+	<div class="col-sm-2"><span style="color:red;"></span><br>
+		<button class="btn btn-success btn-block" ng-click="sendinvoicesum()">Purchase Summary</button>
+	</div>	
+</div><br><br><br><br>
+</div>
+
+
+</form>
+<br><br>
+</div>
+
